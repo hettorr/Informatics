@@ -1,0 +1,83 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Tstack{
+    int data;
+    Tstack*address;
+};
+
+int counter = 0;
+
+void push(Tstack *&top, int N){
+    Tstack*temp = new Tstack;
+    temp -> data = N;
+    temp -> address = top;
+    top = temp;
+    counter++;
+    
+}
+
+bool pop(Tstack*&top){
+    int cur;
+    if(top == NULL)return false;
+    cur = top -> data;
+    cout << cur<<"\n";
+    Tstack*temp = top;
+    top = top -> address;
+    delete temp;
+    counter--;
+    return true;
+}
+
+bool back(Tstack*&top){
+    if(top == NULL)return false;
+    cout << top->data<<"\n";
+    return true;
+}
+
+void size(){
+    cout << counter<<"\n";
+}
+
+void clear(Tstack*&top){
+    Tstack*temp = top;
+    while(top != NULL){
+        temp = top;
+        top = top -> address;
+        delete temp;
+    }
+    counter =0;
+    cout << "ok"<<"\n";
+}
+
+int main() {
+    string com;
+    int N;
+    Tstack*top = NULL;
+    bool flag = true;
+    while(flag){
+        cin >> com;
+        if(com == "push"){
+            cin >> N;
+            push(top,N);
+            cout << "ok"<<"\n";
+        }
+        else if(com == "pop"){
+            if(!pop(top)) cout << "error" <<"\n";
+        }
+        else if(com == "back"){
+            if(!back(top)) cout << "error"<<"\n";
+        }
+        else if(com == "size"){
+            size();
+        }
+        else if(com == "clear"){
+            clear(top);
+        }
+        else if(com == "exit"){
+            flag = false;
+            cout << "bye"<<"\n";
+        }
+    }
+    return 0;
+}
