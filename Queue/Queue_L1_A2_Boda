@@ -1,0 +1,99 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct TLinkOne{
+    int data;
+    TLinkOne*address;
+};
+
+
+void add_L1_A2(TLinkOne*&head,TLinkOne*&tail,int N){
+    TLinkOne*temp = new TLinkOne;
+    temp -> data = N;
+    temp -> address = NULL;
+    if(head == NULL){
+        head = temp;
+        tail = temp;
+        return;
+    }
+    tail -> address = temp;
+    tail = temp;
+    
+}
+
+bool del_L1_A2(TLinkOne*&head, TLinkOne*&tail, int&dat){
+    if(head == NULL)return false;
+    dat = head -> data;
+    if(head == tail){
+        dat = tail -> data;
+        delete head;
+        head =tail=NULL;
+        return true;
+    }
+    TLinkOne*temp = head;
+    head = head ->address;
+    delete temp;
+    return true;
+}
+
+bool front(TLinkOne*top, int &dat){
+    if(top == NULL)return false;
+    dat = top -> data;
+    return true;
+}
+
+int size(TLinkOne*top){
+    int res= 0;
+
+    while(top != NULL){
+        top = top -> address;
+        res++;
+    }
+    return res;
+}
+
+void clear(TLinkOne*&top,TLinkOne*&tail){
+    TLinkOne*temp = top;
+    while(top != NULL){
+        temp = top;
+        top = top -> address;
+        delete temp;
+    }
+    
+}
+
+int main() {
+    string com;
+    int N;
+    TLinkOne*top = NULL;
+    TLinkOne*tail = NULL;
+    bool flag = true;
+    while(flag){
+        cin >> com;
+        if(com == "push"){
+            cin >> N;
+            add_L1_A2(top,tail,N);
+            cout << "ok"<<"\n";
+        }
+        else if(com == "pop"){
+            if(!del_L1_A2(top,tail,N)) cout << "error" <<"\n";
+            else cout <<N<<"\n";
+        }
+        else if(com == "front"){
+            if(!front(top,N)) cout << "error"<<"\n";
+            else cout <<N<<"\n";
+        }
+        else if(com == "size"){
+            cout << size(top) <<"\n";
+        }
+        else if(com == "clear"){
+            clear(top,tail);
+            cout << "ok"<<"\n";
+        }
+        else if(com == "exit"){
+            flag = false;
+            cout << "bye"<<"\n";
+        }
+    }
+    return 0;
+}
