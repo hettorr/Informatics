@@ -1,105 +1,186 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <string>
 using namespace std;
 
 struct Node {
     long long data;
     Node* next;
+    Node* prev;
 };
 
-struct Queue {
+struct Deque {
     Node* head;
     Node* tail;
     int count;
 };
 
-void push(Queue& q, long long n) {
+bool push_front(Deque& d, long long n) {
+    Node* newNode = new Node;
+    newNode->data = n;
+    newNode->prev = NULL;
+    newNode->next = d.head;
+    
+    if (d.head == NULL) {
+        d.head = d.tail = newNode;
+    }
+    else {
+        d.head->prev = newNode;
+        d.head = newNode;
+    }
+    d.count++;
+    return true;
+}
+
+bool push_back(Deque& d, long long n) {
     Node* newNode = new Node;
     newNode->data = n;
     newNode->next = NULL;
+    newNode->prev = d.tail;
     
-    if (q.tail == NULL) {
-        q.head = newNode;
-        q.tail = newNode;
+    if (d.tail == NULL) {
+        d.head = d.tail = newNode;
     }
     else {
-        q.tail->next = newNode;
-        q.tail = newNode;
+        d.tail->next = newNode;
+        d.tail = newNode;
     }
-    q.count++;
-    cout << "ok\n";
+    d.count++;
+    return true;
 }
 
-void pop(Queue& q) {
-    if (q.head == NULL) {
-        cout << "error\n";
-        return;
+bool pop_front(Deque& d, long long& result) {
+    if (d.head == NULL) {
+        return false;
     }
-    Node* temp = q.head;
-    cout << q.head->data << '\n';
-    q.head = q.head->next;
-    if (q.head == NULL) {
-        q.tail = NULL;
+    
+    result = d.head->data;
+    Node* temp = d.head;
+    
+    if (d.head == d.tail) {
+        d.head = d.tail = NULL;
     }
+    else {
+        d.head = d.head->next;
+        d.head->prev = NULL;
+    }
+    
     delete temp;
-    q.count--;
+    d.count--;
+    return true;
 }
 
-void front(Queue& q) {
-    if (q.head == NULL) {
-        cout << "error\n";
-        return;
+bool pop_back(Deque& d, long long& result) {
+    if (d.tail == NULL) {
+        return false;
     }
-    cout << q.head->data << '\n';
+    
+    result = d.tail->data;
+    Node* temp = d.tail;
+    
+    if (d.head == d.tail) {
+        d.head = d.tail = NULL;
+    }
+    else {
+        d.tail = d.tail->prev;
+        d.tail->next = NULL;
+    }
+    
+    delete temp;
+    d.count--;
+    return true;
 }
 
-void size(Queue& q) {
-    cout << q.count << '\n';
+bool front(Deque& d, long long& result) {
+    if (d.head == NULL) {
+        return false;
+    }
+    result = d.head->data;
+    return true;
 }
 
-void clear(Queue& q) {
-    while (q.head != NULL) {
-        Node* temp = q.head;
-        q.head = q.head->next;
+bool back(Deque& d, long long& result) {
+    if (d.tail == NULL) {
+        return false;
+    }
+    result = d.tail->data;
+    return true;
+}
+
+int size(Deque& d) {
+    return d.count;
+}
+
+void clear(Deque& d) {
+    while (d.head != NULL) {
+        Node* temp = d.head;
+        d.head = d.head->next;
         delete temp;
     }
-    q.tail = NULL;
-    q.count = 0;
-    cout << "ok\n";
-}
-
-void exit() {
-    cout << "bye\n";
+    d.tail = NULL;
+    d.count = 0;
 }
 
 int main() {
-    Queue q;
-    q.head = NULL;
-    q.tail = NULL;
-    q.count = 0;
+    Deque d;
+    d.head = NULL;
+    d.tail = NULL;
+    d.count = 0;
     string command;
+    long long value;
     bool running = true;
     
     while (running && cin >> command) {
-        if (command == "push") {
-            long long n;
-            cin >> n;
-            push(q, n);
+        if (command == "push_front") {
+            cin >> value;
+            push_front(d, value);
+            cout << "ok\n";
         }
-        else if (command == "pop") {
-            pop(q);
+        else if (command == "push_back") {
+            cin >> value;
+            push_back(d, value);
+            cout << "ok\n";
+        }
+        else if (command == "pop_front") {
+            if (pop_front(d, value)) {
+                cout << value << '\n';
+            }
+            else {
+                cout << "error\n";
+            }
+        }
+        else if (command == "pop_back") {
+            if (pop_back(d, value)) {
+                cout << value << '\n';
+            }
+            else {
+                cout << "error\n";
+            }
         }
         else if (command == "front") {
-            front(q);
+            if (front(d, value)) {
+                cout << value << '\n';
+            }
+            else {
+                cout << "error\n";
+            }
+        }
+        else if (command == "back") {
+            if (back(d, value)) {
+                cout << value << '\n';
+            }
+            else {
+                cout << "error\n";
+            }
         }
         else if (command == "size") {
-            size(q);
+            cout << size(d) << '\n';
         }
         else if (command == "clear") {
-            clear(q);
+            clear(d);
+            cout << "ok\n";
         }
         else if (command == "exit") {
-            exit();
+            cout << "bye\n";
             running = false;
         }
     }
