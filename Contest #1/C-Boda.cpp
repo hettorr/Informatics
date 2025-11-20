@@ -1,0 +1,155 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct TLinkOne {
+	int data;
+	TLinkOne*address;
+};
+
+
+void push_back(TLinkOne*& head, int dat) {
+	TLinkOne* temp = new TLinkOne;
+	temp->data = dat;
+	temp->address = NULL;
+
+	if (head == NULL) {
+		head = temp;
+		return;
+	}
+	TLinkOne* cur = head;
+	while (cur->address != NULL) {
+		cur = cur->address;
+	}
+	cur->address = temp;
+}
+
+bool pop_back(TLinkOne*& head, int& dat) {
+	if (head == NULL) return false;
+	if (head -> address == NULL) {
+		dat = head->data;
+		delete head;
+		head = NULL;
+		return true;
+	}
+	TLinkOne* cur = head;
+	while (cur->address->address != NULL) {
+		cur = cur->address;
+	}
+    TLinkOne* temp = cur->address;
+	dat = temp->data;
+	cur->address = NULL;
+	delete temp;
+	return true;
+}
+
+void push_front(TLinkOne*& head, int dat) {
+	TLinkOne* temp = new TLinkOne;
+	temp->data = dat;
+	temp->address = NULL;
+	if (head == NULL) {
+		head = temp;
+		return;
+	}
+
+	temp->address = head;
+	head = temp;
+}
+
+bool pop_front(TLinkOne*& head, int& dat) {
+	if (head == NULL) return false;
+	if (head ->address == NULL) {
+		dat = head->data;
+		delete head;
+		head = NULL;
+		return true;
+	}
+
+	TLinkOne* temp = head;
+	dat = head->data;
+	head = head->address;
+	delete temp;
+	return true;
+}
+
+bool front(TLinkOne*head, int &dat) {
+	if(head == NULL)return false;
+	dat = head -> data;
+	return true;
+}
+
+bool back(TLinkOne*head, int &dat) {
+	if(head == NULL)return false;
+	TLinkOne* cur = head;
+	while (cur->address != NULL) {
+		cur = cur->address;
+	}
+	dat = cur ->data;
+	return true;
+}
+
+int size(TLinkOne*head) {
+	int res= 0;
+
+	while(head != NULL) {
+		head = head -> address;
+		res++;
+	}
+	return res;
+}
+
+void clear(TLinkOne*&head) {
+	TLinkOne*temp = head;
+	while(head != NULL) {
+		temp = head;
+		head = head -> address;
+		delete temp;
+	}
+}
+
+int main() {
+	string com;
+	int N;
+	TLinkOne*head = NULL;
+	bool flag = true;
+	while(flag) {
+		cin >> com;
+		if(com == "push_front") {
+			cin >> N;
+			push_front(head,N);
+			cout << "ok"<<"\n";
+		}
+		else if(com == "push_back") {
+			cin >> N;
+			push_back(head,N);
+			cout << "ok"<<"\n";
+		}
+		else if(com == "pop_front") {
+			if(!pop_front(head,N)) cout << "error" <<"\n";
+			else cout <<N<<"\n";
+		}
+		else if(com == "pop_back") {
+			if(!pop_back(head,N)) cout << "error" <<"\n";
+			else cout <<N<<"\n";
+		}
+		else if(com == "front") {
+			if(!front(head,N)) cout << "error"<<"\n";
+			else cout <<N<<"\n";
+		}
+		else if(com == "back") {
+			if(!back(head,N)) cout << "error"<<"\n";
+			else cout <<N<<"\n";
+		}
+		else if(com == "size") {
+			cout << size(head) <<"\n";
+		}
+		else if(com == "clear") {
+			clear(head);
+			cout << "ok"<<"\n";
+		}
+		else if(com == "exit") {
+			flag = false;
+			cout << "bye"<<"\n";
+		}
+	}
+	return 0;
+}
