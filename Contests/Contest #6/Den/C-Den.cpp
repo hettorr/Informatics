@@ -42,40 +42,29 @@ int dijkstra(int N, vector<int>& prices, vector<vector<int>>& graph) {
             return cur.cost;
         }
         
-        if (cur.tank == 0) {
-            int new_cost = cur.cost + prices[cur.city];
-            if (new_cost < dist[cur.city][0]) {
-                dist[cur.city][0] = new_cost;
-                pq.push({new_cost, cur.city, 0});
-            }
-        }
-        
-        int new_cost2 = cur.cost + prices[cur.city] * 2;
-        if (new_cost2 < dist[cur.city][1]) {
-            dist[cur.city][1] = new_cost2;
-            pq.push({new_cost2, cur.city, 1});
-        }
-        
-        if (cur.tank == 1) {
-            if (cur.cost < dist[cur.city][0]) {
-                dist[cur.city][0] = cur.cost;
-                pq.push({cur.cost, cur.city, 0});
-            }
-        }
-        
         for (int v = 0; v < N; v++) {
             if (cur.city != v && graph[cur.city][v] > 0) {
+                int price = prices[cur.city];
+                
                 if (cur.tank == 1) {
-                    if (cur.cost < dist[v][1]) {
-                        dist[v][1] = cur.cost;
-                        pq.push({cur.cost, v, 1});
+                    if (cur.cost < dist[v][0]) {
+                        dist[v][0] = cur.cost;
+                        pq.push({cur.cost, v, 0});
+                    }
+                    if (cur.cost + price < dist[v][1]) {
+                        dist[v][1] = cur.cost + price;
+                        pq.push({cur.cost + price, v, 1});
                     }
                 }
-                
-                int travel_cost = cur.cost + prices[cur.city];
-                if (travel_cost < dist[v][0]) {
-                    dist[v][0] = travel_cost;
-                    pq.push({travel_cost, v, 0});
+                else {
+                    if (cur.cost + price < dist[v][0]) {
+                        dist[v][0] = cur.cost + price;
+                        pq.push({cur.cost + price, v, 0});
+                    }
+                    if (cur.cost + 2 * price < dist[v][1]) {
+                        dist[v][1] = cur.cost + 2 * price;
+                        pq.push({cur.cost + 2 * price, v, 1});
+                    }
                 }
             }
         }
