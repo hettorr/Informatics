@@ -7,9 +7,9 @@ struct edge {
     int to, weight;
 };
 
-struct node {
+struct Node {
     int vertex, parent, weight;
-    bool operator>(const node& other) const {
+    bool operator>(const Node& other) const {
         return weight > other.weight;
     }
 };
@@ -32,13 +32,13 @@ int prim(int N, vector<vector<edge>>& graph, vector<pair<int, int>>& mst) {
     vector<int> parent(N + 1, -1);
     
     min_edge[1] = 0;
-    priority_queue<node, vector<node>, greater<node>> pq;
+    priority_queue<Node, vector<Node>, greater<Node>> pq;
     pq.push({1, -1, 0});
     
     int total_weight = 0;
     
     while (!pq.empty()) {
-        node cur = pq.top();
+        Node cur = pq.top();
         pq.pop();
         
         if (visited[cur.vertex]) continue;
