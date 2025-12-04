@@ -81,7 +81,8 @@ int main() {
 
     if (count < vertices - 1) {
         cout << -1 << "\n";
-    } else {
+    }
+    else {
         cout << total_weight << "\n";
         output_tree(tree, count);
     }
