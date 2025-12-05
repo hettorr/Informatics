@@ -4,8 +4,6 @@
 #include <iostream>
 #include <vector>
 
-#endif //DEN_BOD_ART_PROG_SDFS_H
-
 class SDFS
 {
 private:
@@ -52,3 +50,5 @@ public:
         return cnt;
     }
 };
+
+#endif //DEN_BOD_ART_PROG_SDFS_H
